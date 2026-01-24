@@ -1,0 +1,134 @@
+# OrchestrAI Configuration
+# Orchestrator settings and API model configuration
+
+orchestrator:
+  version: "1.0.0"
+  auto_commit: true
+  verbose: true
+  max_retries: 3
+  timeout_seconds: 300
+
+models:
+  claude-opus:
+    provider: "anthropic"
+    model_id: "claude-3-5-sonnet-20241022"
+    env_key: "ANTHROPIC_API_KEY"
+    cost_per_mtok: 3.00  # Million tokens input
+    cost_per_mtok_output: 15.00
+    max_tokens: 200000
+    temperature: 0.7
+
+  claude-sonnet:
+    provider: "anthropic"
+    model_id: "claude-3-5-sonnet-20241022"
+    env_key: "ANTHROPIC_API_KEY"
+    cost_per_mtok: 3.00
+    cost_per_mtok_output: 15.00
+    max_tokens: 200000
+    temperature: 0.5
+
+  gemini-3-pro:
+    provider: "google"
+    model_id: "gemini-3-5-pro"
+    env_key: "GOOGLE_API_KEY"
+    cost_per_mtok: 0.50  # Million tokens input (latest pricing)
+    cost_per_mtok_output: 1.50
+    max_tokens: 8192
+    temperature: 0.7
+
+  deepseek:
+    provider: "deepseek"
+    model_id: "deepseek-v3-2"
+    env_key: "DEEPSEEK_API_KEY"
+    cost_per_mtok: 0.27  # MIT license - lowest cost
+    cost_per_mtok_output: 1.10
+    max_tokens: 8192
+    temperature: 0.6
+
+  gpt-5-high:
+    provider: "openai"
+    model_id: "gpt-5.2-high"
+    env_key: "OPENAI_API_KEY"
+    cost_per_mtok: 15.00  # High reasoning model
+    cost_per_mtok_output: 60.00
+    max_tokens: 128000
+    temperature: 0.3
+
+  gemini-2-5-pro:
+    provider: "google"
+    model_id: "gemini-2-5-pro"
+    env_key: "GOOGLE_API_KEY"
+    cost_per_mtok: 0.50  # Only native audio model
+    cost_per_mtok_output: 1.50
+    max_tokens: 8192
+    temperature: 0.5
+
+build_phases:
+  day1:
+    phase: "Architecture"
+    duration_hours: 0.5
+    primary_model: "gemini-3-pro"
+    budget: "$0.50"
+    output: "docs/ARCHITECTURE.md"
+
+  day2:
+    phase: "Backend Audio Engine"
+    duration_hours: 2.5
+    primary_model: "claude-opus"
+    budget: "$0.75"
+    output: "backend/core/audio_engine.py"
+
+  day3:
+    phase: "Voice & Mastering Services"
+    duration_hours: 2.0
+    primary_model: "claude-opus"
+    budget: "$0.60"
+    output: "backend/core/voice_service.py"
+
+  day4:
+    phase: "Frontend React (Timeline & Mixer)"
+    duration_hours: 1.5
+    primary_model: "claude-sonnet"
+    budget: "$0.08"
+    output: "frontend/components/"
+
+  day5:
+    phase: "AI Assistant Panel"
+    duration_hours: 1.5
+    primary_model: "claude-opus"
+    budget: "$0.15"
+    output: "frontend/components/AIAssistant.tsx"
+
+  day6:
+    phase: "DSP Algorithms & Filters"
+    duration_hours: 1.5
+    primary_model: "deepseek"
+    budget: "$0.16"
+    output: "dsp/algorithms.py"
+
+  day7:
+    phase: "Deployment (Docker, K8s, DevOps)"
+    duration_hours: 1.0
+    primary_model: "gpt-5-high"
+    budget: "$0.20"
+    output: "deployment/"
+
+inference_costs_per_user_monthly:
+  voice_transform: 5.00  # 10x transforms @ $0.50 each
+  ai_mastering: 1.00    # 5x mastering @ $0.20 each
+  chat_suggestions: 1.30 # 20x API calls @ $0.065 each
+  total_per_user: 7.30
+
+revenue_model:
+  free_tier: "Basic DAW (3 projects, 5MB storage)"
+  premium_tier: 9.99  # Per user/month
+  premium_users_target: 1000
+  monthly_revenue_at_target: 10000
+  inference_costs: 7300  # At 1000 users
+  estimated_net_margin: 2700  # ~27% margin
+
+github:
+  auto_commit: true
+  commit_prefix: "[DAY]"
+  branch: "main"
+  push_after_commit: true
